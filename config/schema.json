@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "niagara-agent-skills config",
+  "type": "object",
+  "required": [
+    "hosts"
+  ],
+  "properties": {
+    "niagaraHome": {
+      "type": "string",
+      "description": "Niagara install (contains bin/, modules/, jre/) on the machine that runs plat/nre."
+    },
+    "daemonUserHome": {
+      "type": "string",
+      "description": "Daemon user home (stations live under <daemonUserHome>/stations)."
+    },
+    "credentials": {
+      "$ref": "#/definitions/credentials"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Who owns this deployment (safety-model condition 7)."
+    },
+    "hosts": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/definitions/host"
+      }
+    }
+  },
+  "definitions": {
+    "credentials": {
+      "type": "object",
+      "required": [
+        "provider"
+      ],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "enum": [
+            "env",
+            "script",
+            "prompt"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "description": "Provider script path (provider=script)."
+        }
+      }
+    },
+    "host": {
+      "type": "object",
+      "properties": {
+        "hostord": {
+          "type": "string",
+          "pattern": "^(ip|host|local):",
+          "default": "ip:localhost"
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "secure": {
+          "type": "boolean"
+        },
+        "transport": {
+          "type": "string",
+          "enum": [
+            "local",
+            "ssh"
+          ],
+          "default": "local"
+        },
+        "ssh": {
+          "type": "string",
+          "description": "SSH alias (transport=ssh)."
+        },
+        "allow": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "read",
+              "station",
+              "install",
+              "bog",
+              "host"
+            ]
+          }
+        },
+        "stations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "When set, station-tier scripts may only touch these names."
+        },
+        "niagaraHome": {
+          "type": "string"
+        },
+        "daemonUserHome": {
+          "type": "string"
+        },
+        "healthUrl": {
+          "type": "string"
+        },
+        "credentials": {
+          "$ref": "#/definitions/credentials"
+        }
+      }
+    }
+  }
+}

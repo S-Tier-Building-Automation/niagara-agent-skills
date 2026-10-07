@@ -1,0 +1,56 @@
+{
+  "$schema": "./schema.json",
+  "niagaraHome": "C:\\\\Niagara\\\\Niagara-4.15.0.0",
+  "daemonUserHome": "C:\\\\ProgramData\\\\Niagara4.15\\\\brand",
+  "credentials": {
+    "provider": "env"
+  },
+  "owner": "ops@example.com",
+  "hosts": {
+    "local": {
+      "hostord": "ip:localhost",
+      "port": 5011,
+      "secure": true,
+      "transport": "local",
+      "allow": [
+        "read",
+        "station",
+        "install",
+        "bog",
+        "host"
+      ],
+      "stations": [
+        "demo"
+      ],
+      "healthUrl": "https://localhost/stier/health"
+    },
+    "jace-1": {
+      "hostord": "ip:192.0.2.10",
+      "port": 5011,
+      "secure": true,
+      "transport": "local",
+      "allow": [
+        "read",
+        "station",
+        "install"
+      ],
+      "credentials": {
+        "provider": "script",
+        "path": "~/.niagara-agent/providers/vault.ps1"
+      }
+    },
+    "sup-a": {
+      "hostord": "ip:localhost",
+      "transport": "ssh",
+      "ssh": "sup-a",
+      "allow": [
+        "read",
+        "station",
+        "install",
+        "bog",
+        "host"
+      ],
+      "healthUrl": "https://localhost/stier/health"
+    }
+  }
+}

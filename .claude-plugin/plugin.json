@@ -1,0 +1,21 @@
+{
+  "name": "niagara-agent-skills",
+  "version": "0.1.0",
+  "description": "Agent skills that operate a Niagara 4 host through its own command-line tools (plat, nre, service control, offline config.bog edits) with allowlists, confirmation gates and an audit trail.",
+  "author": {
+    "name": "niagara-agent-skills contributors"
+  },
+  "homepage": "https://github.com/S-Tier-Building-Automation/niagara-agent-skills",
+  "repository": "https://github.com/S-Tier-Building-Automation/niagara-agent-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "niagara",
+    "tridium",
+    "plat",
+    "nre",
+    "building-automation",
+    "operations",
+    "agent-skills"
+  ],
+  "skills": "./skills/"
+}

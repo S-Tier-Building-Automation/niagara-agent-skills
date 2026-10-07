@@ -1,0 +1,7 @@
+INFO [10:12:01 07-Oct-26 UTC][sys.registry] Loading registry...
+INFO [10:12:03 07-Oct-26 UTC][sys.registry] Loaded [1.802sec]
+Name                Status   Fox Port HTTP Port Auto-Start   Restart on Failure
+------------------- -------- -------- --------- ------------ ------------------
+demo                running  n/a      80        false        true
+Building_A          idle     n/a      n/a       false        true
+archive             disabled n/a      n/a       false        false

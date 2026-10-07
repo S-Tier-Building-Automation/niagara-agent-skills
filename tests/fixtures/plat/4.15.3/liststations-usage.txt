@@ -1,0 +1,19 @@
+
+usage:
+  plat liststations <flags> [stationname]
+required flags:
+  -h:<hostord>             ORD for the remote host
+optional flags:
+  -usr:<userName>          user name for the host's platform daemon
+  -pwd:<password>          password for the host's platform daemon
+  -running                 limit listing to running stations
+  -noinput                 if given, command will fail when username
+                             and password are missing or incorrect,
+                             instead of prompting and reading them
+                             from stdin
+  -p:<port>                port for the host's platform daemon
+                             if omitted, default port 3011 or 5011 is used
+  -secure                  if given, the connection will be encrypted with TLS
+  -locale:<x>              set the default locale (en_US)
+  -@<option>               pass option to Java VM
+  -buildreg                force rebuild of the registry

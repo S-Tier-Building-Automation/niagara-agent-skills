@@ -1,0 +1,26 @@
+
+usage:
+  plat watchstation <flags> [stationname]
+parameters:
+  stationname              name of the station to view, or "daemon"
+                             if the daemon's output is to be watched.
+                             If omitted, the first/only station will be used
+required flags:
+  -h:<hostord>             ORD for the remote host
+optional flags:
+  -usr:<userName>          user name for the host's platform daemon
+  -pwd:<password>          password for the host's platform daemon
+  -follow                  if specified, the command will execute until
+                             it is killed (ctrl-c), and will continue
+                             to display output as the station produces it
+  -f                       same as -follow
+  -noinput                 if given, command will fail when username
+                             and password are missing or incorrect,
+                             instead of prompting and reading them
+                             from stdin
+  -p:<port>                port for the host's platform daemon
+                             if omitted, default port 3011 or 5011 is used
+  -secure                  if given, the connection will be encrypted with TLS
+  -locale:<x>              set the default locale (en_US)
+  -@<option>               pass option to Java VM
+  -buildreg                force rebuild of the registry

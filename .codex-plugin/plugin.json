@@ -1,0 +1,41 @@
+{
+  "name": "niagara-agent-skills",
+  "version": "0.1.0",
+  "description": "Agent skills that operate a Niagara 4 host through its own command-line tools (plat, nre, service control, offline config.bog edits) with allowlists, confirmation gates and an audit trail.",
+  "author": {
+    "name": "niagara-agent-skills contributors",
+    "url": "https://github.com/S-Tier-Building-Automation/niagara-agent-skills"
+  },
+  "homepage": "https://github.com/S-Tier-Building-Automation/niagara-agent-skills",
+  "repository": "https://github.com/S-Tier-Building-Automation/niagara-agent-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "niagara",
+    "tridium",
+    "plat",
+    "nre",
+    "building-automation",
+    "operations",
+    "agent-skills"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Niagara Agent Skills",
+    "shortDescription": "Stations, modules, daemon and logs on Niagara 4 hosts, safely, from an agent.",
+    "longDescription": "Thin, audited wrappers over Niagara's own plat.exe and nre.exe plus Windows service control and offline config.bog editing. Host allowlist, credential providers, confirmation gates for destructive tiers, dry-run everywhere, JSON output, and the same scripts run locally on the host or over SSH.",
+    "developerName": "niagara-agent-skills contributors",
+    "category": "Operations",
+    "capabilities": [
+      "Code",
+      "Write",
+      "Interactive"
+    ],
+    "websiteURL": "https://github.com/S-Tier-Building-Automation/niagara-agent-skills",
+    "defaultPrompt": [
+      "List the stations on the local Niagara host.",
+      "Restart station demo and tail its console until it starts.",
+      "Install STierAPI-rt.jar on host jace-1 and verify the module loads."
+    ],
+    "brandColor": "#1D4ED8"
+  }
+}

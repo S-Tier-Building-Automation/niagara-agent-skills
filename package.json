@@ -1,0 +1,16 @@
+{
+  "name": "niagara-agent-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agent skills that operate Niagara 4 hosts through plat.exe / nre.exe with allowlists, confirmation gates and an audit trail.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test "tests/node/**/*.test.mjs" && pwsh -NoProfile -Command \"Invoke-Pester -Path tests/unit -CI\"",
+    "test:node": "node --test "tests/node/**/*.test.mjs"",
+    "test:pester": "pwsh -NoProfile -Command \"Invoke-Pester -Path tests/unit -CI\"",
+    "lint": "pwsh -NoProfile -File tests/lint.ps1",
+    "check:secrets": "node tests/check-secrets.mjs"
+  }
+}

@@ -1,0 +1,17 @@
+INFO [10:12:01 07-Oct-26 UTC][sys.registry] Loading registry...
+INFO [10:12:03 07-Oct-26 UTC][sys.registry] Loaded [1.802sec]
+Host: ip:localhost
+Host Name: build-host
+Daemon Version: 4.15.3.28
+Daemon HTTP Port: 3011
+Daemon HTTPS Port: 5011
+Host ID: Win-0000-0000-0000-0000
+Niagara Runtime: 4.15.3.28
+Architecture: x64
+Operating System: Windows 11 (10.0)
+Java Virtual Machine: Eclipse OpenJ9 VM (1.8.0)
+Niagara Stations Enabled: enabled
+Platform TLS Support: enabled
+System Home: C:\Niagara\Niagara-4.15.3.28
+User Home: C:\ProgramData\Niagara4.15\brand
+Locale: en

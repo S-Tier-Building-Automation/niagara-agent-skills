@@ -1,0 +1,21 @@
+{
+  "name": "niagara-agent-skills",
+  "description": "Operate Niagara 4 hosts (stations, modules, daemon, logs) from AI agents via plat.exe / nre.exe.",
+  "owner": {
+    "name": "niagara-agent-skills contributors"
+  },
+  "plugins": [
+    {
+      "name": "niagara-agent-skills",
+      "source": "./",
+      "description": "Platform operations for Niagara 4 hosts.",
+      "category": "Operations",
+      "keywords": [
+        "niagara",
+        "plat",
+        "nre",
+        "operations"
+      ]
+    }
+  ]
+}

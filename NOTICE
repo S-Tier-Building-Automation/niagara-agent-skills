@@ -1,0 +1,11 @@
+niagara-agent-skills
+Copyright 2026 niagara-agent-skills contributors
+
+Licensed under the Apache License, Version 2.0.
+
+Niagara, Niagara Framework, and Tridium are trademarks of Tridium, Inc.
+This project is an independent community effort. It is not affiliated with,
+endorsed by, or supported by Tridium. It wraps the user's own, separately
+licensed Niagara installation through that installation's command-line tools
+and distributes no Tridium software, documentation, or other proprietary
+material.

@@ -1,0 +1,6 @@
+INFO [10:12:01 07-Oct-26 UTC][sys.registry] Loading registry...
+Modules matching 'baja*':
+baja           4.15.3.28   Tridium
+bajaScript-rt  4.15.3.28   Tridium
+bajaScript-ux  4.15.3.28   Tridium
+bajaui-wb      4.15.3.28   Tridium

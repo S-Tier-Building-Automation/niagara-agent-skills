@@ -1,0 +1,13 @@
+
+usage:
+  plat script <flags>
+optional flags:
+  -f:<filePath>            reads the script from the given file, instead
+                             of from standard input
+  -echo                    echo commands read from the script
+usage:
+  -?                       same as -usage
+  -help                    same as -usage
+  -locale:<x>              set the default locale (en_US)
+  -@<option>               pass option to Java VM
+  -buildreg                force rebuild of the registry
