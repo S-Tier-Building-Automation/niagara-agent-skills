@@ -55,7 +55,7 @@ function Write-AuditRecord {
         ts         = (Get-Date).ToUniversalTime().ToString('o')
         traceId    = $TraceId
         actor      = $actor
-        agent      = ([Environment]::GetEnvironmentVariable('NIAGARA_AGENT_NAME') ?? 'manual')
+        agent      = $(if ([Environment]::GetEnvironmentVariable('NIAGARA_AGENT_NAME')) { [Environment]::GetEnvironmentVariable('NIAGARA_AGENT_NAME') } else { 'manual' })
         op         = $Op
         tier       = $Tier
         hostAlias  = $HostAlias

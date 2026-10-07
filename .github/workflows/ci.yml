@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - run: node --test "tests/node/**/*.test.mjs"
+      - run: node --test tests/node/remote.test.mjs
 
   pester:
     strategy:

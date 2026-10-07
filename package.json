@@ -7,8 +7,8 @@
   "type": "module",
   "engines": { "node": ">=18" },
   "scripts": {
-    "test": "node --test "tests/node/**/*.test.mjs" && pwsh -NoProfile -Command \"Invoke-Pester -Path tests/unit -CI\"",
-    "test:node": "node --test "tests/node/**/*.test.mjs"",
+    "test": "node --test tests/node/remote.test.mjs && pwsh -NoProfile -Command \"Invoke-Pester -Path tests/unit -CI\"",
+    "test:node": "node --test tests/node/remote.test.mjs",
     "test:pester": "pwsh -NoProfile -Command \"Invoke-Pester -Path tests/unit -CI\"",
     "lint": "pwsh -NoProfile -File tests/lint.ps1",
     "check:secrets": "node tests/check-secrets.mjs"

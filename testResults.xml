@@ -1,108 +1,108 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="39" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-07" time="13:21:27">
-  <environment cwd="/Users/m1/Documents/GitHub/niagara-agent-skills" os-version="25.6.0" platform="Darwin" machine-name="fdea9694-ad1f-4a59-a1e5-5870c844f4a9" user-domain="" user="m1" nunit-version="2.5.8.0" clr-version="10.0.6" />
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="39" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2026-10-07" time="13:23:16">
+  <environment nunit-version="2.5.8.0" clr-version="10.0.6" cwd="/Users/m1/Documents/GitHub/niagara-agent-skills" machine-name="fdea9694-ad1f-4a59-a1e5-5870c844f4a9" user-domain="" user="m1" platform="Darwin" os-version="25.6.0" />
   <culture-info current-culture="en-FR" current-uiculture="en-FR" />
-  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="2.7385" asserts="0" description="Pester">
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="2.9702" asserts="0" description="Pester">
     <results>
-      <test-suite type="TestFixture" name="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/parsers.Tests.ps1" executed="True" result="Success" success="True" time="0.3207" asserts="0" description="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/parsers.Tests.ps1">
+      <test-suite type="TestFixture" name="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/parsers.Tests.ps1" executed="True" result="Success" success="True" time="0.3256" asserts="0" description="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/parsers.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="Split-NiagaraOutput" executed="True" result="Success" success="True" time="0.0731" asserts="0" description="Split-NiagaraOutput">
+          <test-suite type="TestFixture" name="Split-NiagaraOutput" executed="True" result="Success" success="True" time="0.073" asserts="0" description="Split-NiagaraOutput">
             <results>
-              <test-case description="separates NRE INFO chatter from payload" name="Split-NiagaraOutput.separates NRE INFO chatter from payload" time="0.0459" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="tolerates empty input" name="Split-NiagaraOutput.tolerates empty input" time="0.0082" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="separates NRE INFO chatter from payload" name="Split-NiagaraOutput.separates NRE INFO chatter from payload" time="0.0461" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="tolerates empty input" name="Split-NiagaraOutput.tolerates empty input" time="0.0087" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="ConvertFrom-PlatListStations" executed="True" result="Success" success="True" time="0.1342" asserts="0" description="ConvertFrom-PlatListStations">
+          <test-suite type="TestFixture" name="ConvertFrom-PlatListStations" executed="True" result="Success" success="True" time="0.136" asserts="0" description="ConvertFrom-PlatListStations">
             <results>
-              <test-case description="parses the 4.15 station table with column offsets" name="ConvertFrom-PlatListStations.parses the 4.15 station table with column offsets" time="0.0521" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="returns an empty list for a header-only table" name="ConvertFrom-PlatListStations.returns an empty list for a header-only table" time="0.0036" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="maps unknown status words to unknown" name="ConvertFrom-PlatListStations.maps unknown status words to unknown" time="0.0037" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="parses the 4.15 station table with column offsets" name="ConvertFrom-PlatListStations.parses the 4.15 station table with column offsets" time="0.0539" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="returns an empty list for a header-only table" name="ConvertFrom-PlatListStations.returns an empty list for a header-only table" time="0.0034" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="maps unknown status words to unknown" name="ConvertFrom-PlatListStations.maps unknown status words to unknown" time="0.0039" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="ConvertFrom-PlatKeyValue" executed="True" result="Success" success="True" time="0.1458" asserts="0" description="ConvertFrom-PlatKeyValue">
+          <test-suite type="TestFixture" name="ConvertFrom-PlatKeyValue" executed="True" result="Success" success="True" time="0.1485" asserts="0" description="ConvertFrom-PlatKeyValue">
             <results>
-              <test-case description="parses plat details into a map" name="ConvertFrom-PlatKeyValue.parses plat details into a map" time="0.0102" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="parses plat details into a map" name="ConvertFrom-PlatKeyValue.parses plat details into a map" time="0.011" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="ConvertFrom-NreModules" executed="True" result="Success" success="True" time="0.1549" asserts="0" description="ConvertFrom-NreModules">
+          <test-suite type="TestFixture" name="ConvertFrom-NreModules" executed="True" result="Success" success="True" time="0.1576" asserts="0" description="ConvertFrom-NreModules">
             <results>
-              <test-case description="parses nre -modules output" name="ConvertFrom-NreModules.parses nre -modules output" time="0.0075" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="parses nre -modules output" name="ConvertFrom-NreModules.parses nre -modules output" time="0.0076" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="ConvertFrom-PlatUsage" executed="True" result="Success" success="True" time="0.1671" asserts="0" description="ConvertFrom-PlatUsage">
+          <test-suite type="TestFixture" name="ConvertFrom-PlatUsage" executed="True" result="Success" success="True" time="0.1711" asserts="0" description="ConvertFrom-PlatUsage">
             <results>
-              <test-case description="extracts advertised flags" name="ConvertFrom-PlatUsage.extracts advertised flags" time="0.007" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="sees -ood only on moduleinstall" name="ConvertFrom-PlatUsage.sees -ood only on moduleinstall" time="0.0033" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="extracts advertised flags" name="ConvertFrom-PlatUsage.extracts advertised flags" time="0.0076" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="sees -ood only on moduleinstall" name="ConvertFrom-PlatUsage.sees -ood only on moduleinstall" time="0.0037" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
         </results>
       </test-suite>
-      <test-suite type="TestFixture" name="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/plat.Tests.ps1" executed="True" result="Success" success="True" time="0.2632" asserts="0" description="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/plat.Tests.ps1">
+      <test-suite type="TestFixture" name="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/plat.Tests.ps1" executed="True" result="Success" success="True" time="0.2729" asserts="0" description="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/plat.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="Get-NiagaraAgentConfig / Resolve-NiagaraHost" executed="True" result="Success" success="True" time="0.0418" asserts="0" description="Get-NiagaraAgentConfig / Resolve-NiagaraHost">
+          <test-suite type="TestFixture" name="Get-NiagaraAgentConfig / Resolve-NiagaraHost" executed="True" result="Success" success="True" time="0.0434" asserts="0" description="Get-NiagaraAgentConfig / Resolve-NiagaraHost">
             <results>
-              <test-case description="loads the config and resolves an allowlisted host" name="Get-NiagaraAgentConfig / Resolve-NiagaraHost.loads the config and resolves an allowlisted host" time="0.016" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="fails closed for an unknown alias" name="Get-NiagaraAgentConfig / Resolve-NiagaraHost.fails closed for an unknown alias" time="0.021" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="fails for a missing config file" name="Get-NiagaraAgentConfig / Resolve-NiagaraHost.fails for a missing config file" time="0.0029" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="loads the config and resolves an allowlisted host" name="Get-NiagaraAgentConfig / Resolve-NiagaraHost.loads the config and resolves an allowlisted host" time="0.0162" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="fails closed for an unknown alias" name="Get-NiagaraAgentConfig / Resolve-NiagaraHost.fails closed for an unknown alias" time="0.0224" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="fails for a missing config file" name="Get-NiagaraAgentConfig / Resolve-NiagaraHost.fails for a missing config file" time="0.003" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Invoke-Plat -DryRun" executed="True" result="Success" success="True" time="0.1381" asserts="0" description="Invoke-Plat -DryRun">
+          <test-suite type="TestFixture" name="Invoke-Plat -DryRun" executed="True" result="Success" success="True" time="0.1435" asserts="0" description="Invoke-Plat -DryRun">
             <results>
-              <test-case description="builds a masked argv and never shows the password" name="Invoke-Plat -DryRun.builds a masked argv and never shows the password" time="0.0206" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="refuses tiers the host does not allow" name="Invoke-Plat -DryRun.refuses tiers the host does not allow" time="0.0025" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="refuses arguments that look like flags" name="Invoke-Plat -DryRun.refuses arguments that look like flags" time="0.0024" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="refuses non-alphabetic command names" name="Invoke-Plat -DryRun.refuses non-alphabetic command names" time="0.0027" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="builds a masked argv and never shows the password" name="Invoke-Plat -DryRun.builds a masked argv and never shows the password" time="0.0198" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="refuses tiers the host does not allow" name="Invoke-Plat -DryRun.refuses tiers the host does not allow" time="0.0026" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="refuses arguments that look like flags" name="Invoke-Plat -DryRun.refuses arguments that look like flags" time="0.0031" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="refuses non-alphabetic command names" name="Invoke-Plat -DryRun.refuses non-alphabetic command names" time="0.0023" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Write-AuditRecord" executed="True" result="Success" success="True" time="0.1919" asserts="0" description="Write-AuditRecord">
+          <test-suite type="TestFixture" name="Write-AuditRecord" executed="True" result="Success" success="True" time="0.2023" asserts="0" description="Write-AuditRecord">
             <results>
-              <test-case description="writes a redacted JSONL record" name="Write-AuditRecord.writes a redacted JSONL record" time="0.0333" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="is queryable by Read-AuditRecords" name="Write-AuditRecord.is queryable by Read-AuditRecords" time="0.019" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="writes a redacted JSONL record" name="Write-AuditRecord.writes a redacted JSONL record" time="0.0407" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="is queryable by Read-AuditRecords" name="Write-AuditRecord.is queryable by Read-AuditRecords" time="0.0167" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Get-NiagaraCredential" executed="True" result="Success" success="True" time="0.2135" asserts="0" description="Get-NiagaraCredential">
+          <test-suite type="TestFixture" name="Get-NiagaraCredential" executed="True" result="Success" success="True" time="0.2223" asserts="0" description="Get-NiagaraCredential">
             <results>
-              <test-case description="uses the env provider" name="Get-NiagaraCredential.uses the env provider" time="0.0064" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="throws NoCredential when nothing is configured" name="Get-NiagaraCredential.throws NoCredential when nothing is configured" time="0.0027" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="runs a script provider" name="Get-NiagaraCredential.runs a script provider" time="0.0108" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="uses the env provider" name="Get-NiagaraCredential.uses the env provider" time="0.0063" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="throws NoCredential when nothing is configured" name="Get-NiagaraCredential.throws NoCredential when nothing is configured" time="0.0026" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="runs a script provider" name="Get-NiagaraCredential.runs a script provider" time="0.0065" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
         </results>
       </test-suite>
-      <test-suite type="TestFixture" name="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/scripts.Tests.ps1" executed="True" result="Success" success="True" time="2.1004" asserts="0" description="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/scripts.Tests.ps1">
+      <test-suite type="TestFixture" name="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/scripts.Tests.ps1" executed="True" result="Success" success="True" time="2.3173" asserts="0" description="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/scripts.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="confirmation and allowlist gates" executed="True" result="Success" success="True" time="2.0665" asserts="0" description="confirmation and allowlist gates">
+          <test-suite type="TestFixture" name="confirmation and allowlist gates" executed="True" result="Success" success="True" time="2.2862" asserts="0" description="confirmation and allowlist gates">
             <results>
-              <test-case description="start-station exits 3 without -Confirmed" name="confirmation and allowlist gates.start-station exits 3 without -Confirmed" time="0.3205" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="stop-station exits 4 on a read-only host" name="confirmation and allowlist gates.stop-station exits 4 on a read-only host" time="0.2756" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="list-stations exits 4 for an unknown alias" name="confirmation and allowlist gates.list-stations exits 4 for an unknown alias" time="0.2642" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="reboot-host requires -ConfirmHost to match" name="confirmation and allowlist gates.reboot-host requires -ConfirmHost to match" time="0.2812" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="start-station -DryRun on a station outside the stations allowlist exits 4" name="confirmation and allowlist gates.start-station -DryRun on a station outside the stations allowlist exits 4" time="0.2926" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="list-stations -DryRun returns a masked plan without plat installed" name="confirmation and allowlist gates.list-stations -DryRun returns a masked plan without plat installed" time="0.3631" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="read-audit-log sees the records the gates wrote" name="confirmation and allowlist gates.read-audit-log sees the records the gates wrote" time="0.2676" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="start-station exits 3 without -Confirmed" name="confirmation and allowlist gates.start-station exits 3 without -Confirmed" time="0.3687" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="stop-station exits 4 on a read-only host" name="confirmation and allowlist gates.stop-station exits 4 on a read-only host" time="0.4154" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="list-stations exits 4 for an unknown alias" name="confirmation and allowlist gates.list-stations exits 4 for an unknown alias" time="0.2833" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="reboot-host requires -ConfirmHost to match" name="confirmation and allowlist gates.reboot-host requires -ConfirmHost to match" time="0.2921" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="start-station -DryRun on a station outside the stations allowlist exits 4" name="confirmation and allowlist gates.start-station -DryRun on a station outside the stations allowlist exits 4" time="0.2896" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="list-stations -DryRun returns a masked plan without plat installed" name="confirmation and allowlist gates.list-stations -DryRun returns a masked plan without plat installed" time="0.3735" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="read-audit-log sees the records the gates wrote" name="confirmation and allowlist gates.read-audit-log sees the records the gates wrote" time="0.2618" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
         </results>
       </test-suite>
-      <test-suite type="TestFixture" name="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/validators.Tests.ps1" executed="True" result="Success" success="True" time="0.0542" asserts="0" description="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/validators.Tests.ps1">
+      <test-suite type="TestFixture" name="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/validators.Tests.ps1" executed="True" result="Success" success="True" time="0.0544" asserts="0" description="/Users/m1/Documents/GitHub/niagara-agent-skills/tests/unit/validators.Tests.ps1">
         <results>
-          <test-suite type="TestFixture" name="Test-NiagaraArgument" executed="True" result="Success" success="True" time="0.0237" asserts="0" description="Test-NiagaraArgument">
+          <test-suite type="TestFixture" name="Test-NiagaraArgument" executed="True" result="Success" success="True" time="0.0241" asserts="0" description="Test-NiagaraArgument">
             <results>
               <test-case description="accepts a plain station name" name="Test-NiagaraArgument.accepts a plain station name" time="0.001" asserts="0" success="True" result="Success" executed="True" />
               <test-case description="rejects values that look like flags" name="Test-NiagaraArgument.rejects values that look like flags" time="0.0014" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="rejects whitespace in station names" name="Test-NiagaraArgument.rejects whitespace in station names" time="0.0038" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="rejects double quotes" name="Test-NiagaraArgument.rejects double quotes" time="0.0012" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="rejects control characters" name="Test-NiagaraArgument.rejects control characters" time="0.0068" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="rejects empty values" name="Test-NiagaraArgument.rejects empty values" time="0.0012" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="requires an ORD scheme for hosts" name="Test-NiagaraArgument.requires an ORD scheme for hosts" time="0.0041" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="rejects path traversal" name="Test-NiagaraArgument.rejects path traversal" time="0.0017" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="validates module names" name="Test-NiagaraArgument.validates module names" time="0.0013" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects whitespace in station names" name="Test-NiagaraArgument.rejects whitespace in station names" time="0.0043" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects double quotes" name="Test-NiagaraArgument.rejects double quotes" time="0.0014" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects control characters" name="Test-NiagaraArgument.rejects control characters" time="0.0063" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects empty values" name="Test-NiagaraArgument.rejects empty values" time="0.0011" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="requires an ORD scheme for hosts" name="Test-NiagaraArgument.requires an ORD scheme for hosts" time="0.0048" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="rejects path traversal" name="Test-NiagaraArgument.rejects path traversal" time="0.0014" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="validates module names" name="Test-NiagaraArgument.validates module names" time="0.0012" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
-          <test-suite type="TestFixture" name="Test-NiagaraTier" executed="True" result="Success" success="True" time="0.0268" asserts="0" description="Test-NiagaraTier">
+          <test-suite type="TestFixture" name="Test-NiagaraTier" executed="True" result="Success" success="True" time="0.0264" asserts="0" description="Test-NiagaraTier">
             <results>
-              <test-case description="allows configured tiers only" name="Test-NiagaraTier.allows configured tiers only" time="0.001" asserts="0" success="True" result="Success" executed="True" />
-              <test-case description="denies everything when allow is absent" name="Test-NiagaraTier.denies everything when allow is absent" time="0.0011" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="allows configured tiers only" name="Test-NiagaraTier.allows configured tiers only" time="0.0009" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="denies everything when allow is absent" name="Test-NiagaraTier.denies everything when allow is absent" time="0.0006" asserts="0" success="True" result="Success" executed="True" />
             </results>
           </test-suite>
         </results>
