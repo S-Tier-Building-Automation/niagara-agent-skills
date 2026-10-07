@@ -24,7 +24,7 @@ restricts the file's ACL to the current user (`icacls` on Windows, `chmod 600` e
 `plat script -f:<file>`, and deletes the file in `finally`. The credential never appears on the
 command line, in `Get-Process` output, in the audit log or in the dry-run plan (`-pwd:********`).
 
-If a Niagara version's `plat script` does not accept per-line credentials, `Invoke-Plat
+`plat script -f:` takes a Niagara file path, so the library passes `/C:/dir/file` on Windows (verified on 4.15.3.28). If a Niagara version's `plat script` does not accept per-line credentials, `Invoke-Plat
 -CredentialMode argv` falls back to the classic form; set `"credentialMode":"argv"` on the host
 in the config to make that the default for that host.
 

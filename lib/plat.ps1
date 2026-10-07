@@ -200,7 +200,9 @@ function Invoke-Plat {
                 [System.IO.File]::WriteAllText($tmp, $line + [Environment]::NewLine, [System.Text.UTF8Encoding]::new($false))
             } finally { $plain = $null }
             Protect-TempFile -Path $tmp
-            $argv = @('script', "-f:$tmp")
+            # plat parses -f: as a Niagara FilePath: a Windows path with a drive colon
+            # (C:\x\y) is rejected ("Illegal char ':'"); the accepted absolute form is /C:/x/y.
+            $argv = @('script', "-f:$(ConvertTo-PlatFilePath -Path $tmp)")
         } elseif ($cred) {
             $plain = ConvertTo-PlainText -Secure $cred.Password
             $argv = @($Command) + $common + @("-usr:$($cred.UserName)", "-pwd:$plain") + $Arguments
@@ -217,6 +219,17 @@ function Invoke-Plat {
     } finally {
         if ($tmp -and (Test-Path -LiteralPath $tmp)) { Remove-Item -LiteralPath $tmp -Force -ErrorAction SilentlyContinue }
     }
+}
+
+function ConvertTo-PlatFilePath {
+    <#
+    .SYNOPSIS
+        Converts a local absolute path into the form plat's -f:/path flag accepts (/C:/dir/file on Windows).
+    #>
+    param([Parameter(Mandatory)] [string] $Path)
+    $p = $Path -replace '\\', '/'
+    if ($p -match '^[A-Za-z]:/') { return '/' + $p }
+    return $p
 }
 
 function Protect-TempFile {

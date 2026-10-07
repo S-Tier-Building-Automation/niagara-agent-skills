@@ -1,6 +1,6 @@
 {
   "name": "niagara-agent-skills",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Agent skills that operate Niagara 4 hosts through plat.exe / nre.exe with allowlists, confirmation gates and an audit trail.",
   "license": "Apache-2.0",

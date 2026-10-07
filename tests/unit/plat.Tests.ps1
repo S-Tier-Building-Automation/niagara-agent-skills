@@ -59,6 +59,15 @@ Describe 'Invoke-Plat -DryRun' {
     }
 }
 
+Describe 'ConvertTo-PlatFilePath' {
+    It 'turns a Windows path into the /C:/... form plat script -f: accepts' {
+        ConvertTo-PlatFilePath -Path 'C:\Users\ops\.niagara-agent\tmp\x.plat' | Should -Be '/C:/Users/ops/.niagara-agent/tmp/x.plat'
+    }
+    It 'leaves POSIX paths alone' {
+        ConvertTo-PlatFilePath -Path '/home/ops/x.plat' | Should -Be '/home/ops/x.plat'
+    }
+}
+
 Describe 'Write-AuditRecord' {
     It 'writes a redacted JSONL record' {
         $rec = Write-AuditRecord -Op test-op -Status SUCCESS -Tier read -HostAlias local -HostOrd ip:localhost -OpArgs @{ note = 'x -pwd:secret y' } -Detail 'foxs://user:pw@host/'

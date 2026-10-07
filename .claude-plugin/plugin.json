@@ -1,6 +1,6 @@
 {
   "name": "niagara-agent-skills",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Agent skills that operate a Niagara 4 host through its own command-line tools (plat, nre, service control, offline config.bog edits) with allowlists, confirmation gates and an audit trail.",
   "author": {
     "name": "niagara-agent-skills contributors"

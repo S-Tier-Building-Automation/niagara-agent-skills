@@ -69,7 +69,7 @@ function Write-AuditRecord {
         preflight  = $Preflight
         verify     = $Verify
         detail     = (Protect-AuditText -Text $Detail)
-        libVersion = '0.1.0'
+        libVersion = '0.1.1'
     }
     ($record | ConvertTo-Json -Compress -Depth 6) | Add-Content -LiteralPath $file -Encoding utf8
     return $record
