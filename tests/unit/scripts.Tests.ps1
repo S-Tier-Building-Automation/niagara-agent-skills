@@ -81,6 +81,11 @@ Describe 'commission-jace' {
         $r = Invoke-Script 'commission-jace.ps1' @('-HostAlias', 'jace', '-Jar', $script:jar, '-Station', 'bench', '-ConfigPath', $script:cfgPath, '-DryRun', '-SkipSignatureCheck', '-Json')
         $r.exit | Should -Be 0
         $r.result.dryRun | Should -BeTrue
+        # The test JACE (192.0.2.10) is never reachable, so the plan must not claim to be clean.
+        $r.result.ok | Should -BeFalse
+        ($r.result.plan.unverified -join "`n") | Should -Match 'JACE not read'
+        ($r.result.plan.unverified -join "`n") | Should -Match 'versions not compared'
+        ($r.result.plan.unverified -join "`n") | Should -Not -Match 'Signature'
         $steps = $r.result.plan.steps -join "`n"
         $steps | Should -Match 'moduleinstall .*-h:ip:192\.0\.2\.10.*STierAPI-rt'
         $steps | Should -Match '-pwd:\*{8}'

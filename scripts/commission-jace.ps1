@@ -116,6 +116,11 @@ try {
     $blocked = @()
     if ($versions.verdict -eq 'mismatch' -and -not $AllowVersionMismatch) { $blocked += "Niagara $($versions.local) here and $($versions.remote) on the JACE differ in major.minor; install from a matching Niagara (installed here: $installedList) or pass -AllowVersionMismatch" }
     if ($versions.verdict -eq 'unknown' -and -not $DryRun) { $blocked += "Couldn't compare Niagara versions (here: $($versions.local), JACE: $($versions.remote))" }
+    # What a dry run could not check. A clean plan (ok = true) needs this empty as well as $blocked.
+    $unverified = @()
+    if (-not $jace) { $unverified += $(if ($credNote) { $credNote } elseif ($readError) { "JACE not read: $readError" } else { 'JACE not read' }) }
+    if ($versions.verdict -eq 'unknown') { $unverified += "Niagara versions not compared (here: $(if ($versions.local) { $versions.local } else { 'unknown' }), JACE: $(if ($versions.remote) { $versions.remote } else { 'unknown' }))" }
+    foreach ($p in $preflight) { if (-not $SkipSignatureCheck -and $p.signed -isnot [bool]) { $unverified += "Signature of $($p.module) not checked: $($p.signed)" } }
 
     $health = $null
     if ($ctx.host.healthUrl) { $health = Test-StationHealth -Url $ctx.host.healthUrl -SkipCertificateCheck }
@@ -147,9 +152,10 @@ try {
         steps = $steps
         healthBefore = $(if ($health) { [pscustomobject]@{ ok = $health.ok; status = $health.status } } else { $null })
         blocked = $blocked
+        unverified = $unverified
         notes = $notes
     }
-    if ($DryRun) { Complete-AgentScript -Ctx $ctx -Result ([pscustomobject]@{ ok = ($blocked.Count -eq 0); dryRun = $true; plan = $plan }) -Status DRY_RUN -OpArgs $opArgs }
+    if ($DryRun) { Complete-AgentScript -Ctx $ctx -Result ([pscustomobject]@{ ok = ($blocked.Count -eq 0 -and $unverified.Count -eq 0); dryRun = $true; plan = $plan }) -Status DRY_RUN -OpArgs $opArgs }
     if ($blocked.Count -gt 0) { Fail-AgentScript -Ctx $ctx -Message ($blocked -join '; ') -ExitCode 6 -OpArgs $opArgs }
 
     # 4. Apply: stage, install, restart, verify.

@@ -148,11 +148,17 @@ function ConvertFrom-PlatUsage {
 function ConvertFrom-NiagaraVersion {
     <#
     .SYNOPSIS
-        Pulls the first dotted Niagara version (4.15.3.28) out of text such as `nre -version` or the
+        Pulls the Niagara version (4.15.3.28) out of text such as `nre -version` or the
         `Niagara Runtime` line of `plat details`. Returns $null when there is none.
+        `nre -version` prints java.version (1.8.0_472) before nre.vendorVersion, so
+        nre.vendorVersion wins, and java.* values are never taken as the Niagara version.
     #>
     param([AllowEmptyString()] [AllowNull()] [string] $Text)
-    if ($Text -and $Text -match '(\d+\.\d+\.\d+(?:\.\d+)?)') { return $Matches[1] }
+    if (-not $Text) { return $null }
+    $ver = '(\d+\.\d+\.\d+(?:\.\d+)?)'
+    if ($Text -match "nre\.vendorVersion:\s*$ver") { return $Matches[1] }
+    $rest = $Text -replace '(?i)\bjava[\w.]*(?:\s+version)?\s*:\s*\S+', ' '
+    if ($rest -match $ver) { return $Matches[1] }
     return $null
 }
 
