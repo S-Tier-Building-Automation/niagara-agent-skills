@@ -81,6 +81,14 @@ Describe 'ConvertFrom-NiagaraVersion' {
     It 'reads nre -version output' {
         ConvertFrom-NiagaraVersion -Text ((Get-Fixture 'nre/4.15.3/version.txt') -join ' ') | Should -Be '4.15.3.28'
     }
+    It 'reads nre.vendorVersion, not java.version, from the payload Invoke-Nre returns' {
+        $payload = (Split-NiagaraOutput -Lines (Get-Fixture 'nre/4.15.3/version.txt')).payload
+        ConvertFrom-NiagaraVersion -Text ($payload -join ' ') | Should -Be '4.15.3.28'
+    }
+    It 'never takes a java.* value as the Niagara version' {
+        ConvertFrom-NiagaraVersion -Text 'Niagara Runtime Environment   java.version: 1.8.0_472   java.vm.version: 25.472-b08' | Should -BeNullOrEmpty
+        ConvertFrom-NiagaraVersion -Text 'Java Version: 1.8.0_472 Niagara Runtime Environment 4.14.1.16' | Should -Be '4.14.1.16'
+    }
     It 'reads the Niagara Runtime line of plat details' {
         $d = ConvertFrom-PlatKeyValue -Lines (Get-Fixture 'plat/4.15.3/details.txt')
         ConvertFrom-NiagaraVersion -Text $d['Niagara Runtime'] | Should -Be '4.15.3.28'

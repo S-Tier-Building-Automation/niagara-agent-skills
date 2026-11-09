@@ -81,6 +81,11 @@ Describe 'commission-jace' {
         $r = Invoke-Script 'commission-jace.ps1' @('-HostAlias', 'jace', '-Jar', $script:jar, '-Station', 'bench', '-ConfigPath', $script:cfgPath, '-DryRun', '-SkipSignatureCheck', '-Json')
         $r.exit | Should -Be 0
         $r.result.dryRun | Should -BeTrue
+        # The test JACE (192.0.2.10) is never reachable, so the plan must not claim to be clean.
+        $r.result.ok | Should -BeFalse
+        ($r.result.plan.unverified -join "`n") | Should -Match 'JACE not read'
+        ($r.result.plan.unverified -join "`n") | Should -Match 'versions not compared'
+        ($r.result.plan.unverified -join "`n") | Should -Not -Match 'Signature'
         $steps = $r.result.plan.steps -join "`n"
         $steps | Should -Match 'moduleinstall .*-h:ip:192\.0\.2\.10.*STierAPI-rt'
         $steps | Should -Match '-pwd:\*{8}'
@@ -90,5 +95,78 @@ Describe 'commission-jace' {
         $r.result.plan.jars[0].sha256 | Should -Match '^[0-9a-f]{64}$'
         ($r.raw -join "`n") | Should -Not -Match '-pwd:pw\b'
         Test-Path -LiteralPath (Join-Path $script:tmpHome 'modules' 'STierAPI-rt.jar') | Should -BeFalse
+    }
+}
+
+Describe 'invoke-nre' {
+    BeforeAll {
+        Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
+        $script:nreRoot = Join-Path $script:tmpHome 'installs'
+        function New-FakeInstall([string] $name, [string] $version) {
+            $dir = Join-Path $script:nreRoot $name
+            New-Item -ItemType Directory -Force -Path (Join-Path $dir 'bin'), (Join-Path $dir 'modules') | Out-Null
+            $nre = Join-Path (Join-Path $dir 'bin') 'nre'
+            Set-Content -LiteralPath $nre -Value @('#!/bin/sh', "echo 'Niagara Runtime Environment $version'", "echo 'INFO [10:12:01 07-Oct-26 UTC][sys.registry] Loading registry...'")
+            if (-not $IsWindows) { & chmod 755 $nre }
+            $zip = [System.IO.Compression.ZipFile]::Open((Join-Path (Join-Path $dir 'modules') 'baja.jar'), 'Create')
+            try {
+                $w = New-Object System.IO.StreamWriter($zip.CreateEntry('META-INF/module.xml').Open())
+                try { $w.Write("<module name=`"baja`" vendorVersion=`"$version`"/>") } finally { $w.Dispose() }
+            } finally { $zip.Dispose() }
+            return $dir
+        }
+        $script:i415 = New-FakeInstall 'Niagara-4.15.3.28' '4.15.3.28'
+        $script:i414 = New-FakeInstall 'Niagara-4.14.1.16' '4.14.1.16'
+        $script:nreCfg = Join-Path $script:tmpHome 'nre-config.json'
+        @{ niagaraHome = $script:i415; niagaraSearchRoots = @($script:nreRoot); hosts = @{ local = @{ hostord = 'ip:localhost'; allow = @('read') }; jace = @{ hostord = 'ip:192.0.2.10'; port = 5011; secure = $true; allow = @('read') }; box = @{ hostord = 'ip:localhost'; transport = 'ssh'; ssh = 'box'; allow = @('read') } } } |
+            ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $script:nreCfg
+    }
+    It 'lists the installs on this machine' {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-Action', 'homes', '-ConfigPath', $script:nreCfg, '-Json')
+        $r.exit | Should -Be 0
+        $mine = @($r.result.homes | Where-Object { $_.path -like '*installs*' })
+        @($mine | ForEach-Object { $_.version }) | Should -Be @('4.15.3.28', '4.14.1.16')
+    }
+    It 'dry run shows the install it picked for a named version and runs nothing' {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-Action', 'version', '-NiagaraVersion', '4.14', '-ConfigPath', $script:nreCfg, '-DryRun', '-Json')
+        $r.exit | Should -Be 0
+        $r.result.dryRun | Should -BeTrue
+        $r.result.selected.version | Should -Be '4.14.1.16'
+        $r.result.argv[-1] | Should -Be '-version'
+        ($r.raw -join "`n") | Should -Not -Match 'Loading registry'
+    }
+    It 'uses the configured niagaraHome when nothing is named' {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-ConfigPath', $script:nreCfg, '-DryRun', '-Json')
+        $r.result.selected.version | Should -Be '4.15.3.28'
+        $r.result.selected.because | Should -Match 'config'
+    }
+    It 'exits 6 when no install has the version' {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-NiagaraVersion', '4.13', '-ConfigPath', $script:nreCfg, '-DryRun', '-Json')
+        $r.exit | Should -Be 6
+        $r.result.error | Should -Match 'NoMatchingNiagaraHome'
+    }
+    It 'refuses a module pattern with other characters' {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-Action', 'modules', '-ModulePattern', 'a;b', '-ConfigPath', $script:nreCfg, '-DryRun', '-Json')
+        $r.exit | Should -Be 2
+    }
+    It 'refuses an ssh host' {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-HostAlias', 'box', '-ConfigPath', $script:nreCfg, '-DryRun', '-Json')
+        $r.exit | Should -Be 2
+    }
+    It 'matching a host outside the allowlist exits 4' {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-MatchHost', 'ghost', '-ConfigPath', $script:nreCfg, '-DryRun', '-Json')
+        $r.exit | Should -Be 4
+    }
+    It 'dry run of a host match says it would read the host first' {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-MatchHost', 'jace', '-ConfigPath', $script:nreCfg, '-DryRun', '-Json')
+        $r.exit | Should -Be 0
+        $r.result.target.alias | Should -Be 'jace'
+        $r.result.target.read | Should -Match 'plat details'
+    }
+    It 'runs the picked install''s own nre' -Skip:$IsWindows {
+        $r = Invoke-Script 'invoke-nre.ps1' @('-Action', 'version', '-NiagaraVersion', '4.14', '-ConfigPath', $script:nreCfg, '-Json')
+        $r.exit | Should -Be 0 -Because ($r.raw -join ' | ')
+        $r.result.parsed.version | Should -Be '4.14.1.16'
+        $r.result.selected.path | Should -Match 'Niagara-4\.14\.1\.16'
     }
 }

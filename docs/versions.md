@@ -12,6 +12,14 @@ exist on an older release is simply not sent.
 | 4.0 - 4.9 | untested | `plat` existed but output formats may differ |
 | AX (3.x) | unsupported | different tool set |
 
+## Several versions on one machine
+
+Each Niagara release has its own `nre`, `plat` and `modules\` folder. `lib/homes.ps1` finds the
+installs (`Find-NiagaraHomes`), reads each version from `modules\baja.jar` (falling back to the
+folder name), and `Select-NiagaraHome` picks one by path, by version prefix, or by the target
+host's major.minor. `invoke-nre` and `commission-jace` use it; list extra installs with
+`niagaraHomes` or `niagaraSearchRoots` in the config.
+
 Capturing fixtures from your version (no credentials in the output):
 
 ```

@@ -6,7 +6,7 @@ description: Put module jars (for example a freshly built STierAPI-rt.jar) onto 
 # Commission a JACE
 
 ```
-pwsh scripts/commission-jace.ps1 -HostAlias <jace alias> -Jar C:\path\STierAPI-rt.jar[,...] [-Station <name>] -DryRun
+pwsh scripts/commission-jace.ps1 -HostAlias <jace alias> -Jar C:\path\STierAPI-rt.jar[,...] [-Station <name>] [-NiagaraVersion 4.15] -DryRun
 pwsh scripts/commission-jace.ps1 -HostAlias <jace alias> -Jar C:\path\STierAPI-rt.jar[,...] [-Station <name>] -Confirmed -Json
 ```
 
@@ -23,6 +23,10 @@ their yes before `-Confirmed`.
 With `-Confirmed` it copies the jars into `<niagaraHome>\modules` (existing copies kept as
 `.bak-<timestamp>`), runs `plat moduleinstall`, and with `-Station` stops and starts that station,
 waiting for each state, then polls `healthUrl`.
+
+With several Niagara versions installed, it reads the JACE with the configured `niagaraHome`, then
+uses the install with the JACE's major.minor (the plan's `niagaraHome` says which and why).
+`-NiagaraVersion` or `-NiagaraHome` pick one yourself; see `invoke-nre`.
 
 It refuses a local host (use `install-modules`), a station outside the allowlist, an unsigned jar
 (unless `-SkipSignatureCheck`), and a JACE on a different Niagara major.minor than this machine
