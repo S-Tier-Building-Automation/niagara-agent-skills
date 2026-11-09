@@ -104,22 +104,39 @@ function Invoke-NativeCapture {
     $proc = New-Object System.Diagnostics.Process
     $proc.StartInfo = $psi
     $lines = New-Object System.Collections.Generic.List[string]
-    $sync = [System.Object]::new()
-    $handler = {
-        param($src, $e)
-        if ($null -ne $e.Data) {
-            [System.Threading.Monitor]::Enter($sync)
-            try { $lines.Add($e.Data) } finally { [System.Threading.Monitor]::Exit($sync) }
-            if ($OnLine) { & $OnLine $e.Data }
-        }
-    }
-    $proc.add_OutputDataReceived($handler)
-    $proc.add_ErrorDataReceived($handler)
+    # Both streams are read on THIS thread with ReadLineAsync. A scriptblock attached to
+    # OutputDataReceived runs on a thread-pool thread with no runspace, which can abort pwsh
+    # (exit 134) as soon as the child writes a line.
     $sw = [System.Diagnostics.Stopwatch]::StartNew()
     [void]$proc.Start()
-    $proc.BeginOutputReadLine()
-    $proc.BeginErrorReadLine()
-    $timedOut = -not $proc.WaitForExit($TimeoutSec * 1000)
+    $readers = @($proc.StandardOutput, $proc.StandardError)
+    $tasks = @($readers[0].ReadLineAsync(), $readers[1].ReadLineAsync())
+    $open = 2
+    $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSec)
+    $timedOut = $false
+    while ($open -gt 0) {
+        if ([DateTime]::UtcNow -ge $deadline) { $timedOut = $true; break }
+        $progress = $false
+        for ($k = 0; $k -lt 2; $k++) {
+            $t = $tasks[$k]
+            if ($null -eq $t -or -not $t.IsCompleted) { continue }
+            $progress = $true
+            $line = $null
+            try { $line = $t.Result } catch { $line = $null }
+            if ($null -eq $line) { $tasks[$k] = $null; $open--; continue }
+            $lines.Add($line)
+            if ($OnLine) { & $OnLine $line }
+            $tasks[$k] = $readers[$k].ReadLineAsync()
+        }
+        if (-not $progress) {
+            $live = @($tasks | Where-Object { $null -ne $_ })
+            if ($live.Count -gt 0) { [void][System.Threading.Tasks.Task]::WaitAny([System.Threading.Tasks.Task[]]$live, 200) }
+        }
+    }
+    if (-not $timedOut) {
+        $left = [int][Math]::Max(0, ($deadline - [DateTime]::UtcNow).TotalMilliseconds)
+        $timedOut = -not $proc.WaitForExit($left)
+    }
     if ($timedOut) {
         try { $proc.Kill($true) } catch { try { $proc.Kill() } catch { } }
         $proc.WaitForExit(5000) | Out-Null

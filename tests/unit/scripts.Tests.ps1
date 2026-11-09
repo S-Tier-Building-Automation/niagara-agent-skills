@@ -160,7 +160,7 @@ Describe 'invoke-nre' {
     }
     It 'runs the picked install''s own nre' -Skip:$IsWindows {
         $r = Invoke-Script 'invoke-nre.ps1' @('-Action', 'version', '-NiagaraVersion', '4.14', '-ConfigPath', $script:nreCfg, '-Json')
-        $r.exit | Should -Be 0
+        $r.exit | Should -Be 0 -Because ($r.raw -join ' | ')
         $r.result.parsed.version | Should -Be '4.14.1.16'
         $r.result.selected.path | Should -Match 'Niagara-4\.14\.1\.16'
     }
