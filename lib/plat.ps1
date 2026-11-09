@@ -12,6 +12,7 @@ $script:LibRoot = $PSScriptRoot
 . (Join-Path $PSScriptRoot 'parsers.ps1')
 . (Join-Path $PSScriptRoot 'credentials.ps1')
 . (Join-Path $PSScriptRoot 'audit.ps1')
+. (Join-Path $PSScriptRoot 'homes.ps1')
 
 $script:ExitOk = 0; $script:ExitFailed = 1; $script:ExitArgs = 2; $script:ExitNeedsConfirm = 3
 $script:ExitNotAllowlisted = 4; $script:ExitNoCredential = 5; $script:ExitPreflight = 6; $script:ExitVerify = 7; $script:ExitTimeout = 124

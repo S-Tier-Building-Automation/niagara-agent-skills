@@ -7,6 +7,8 @@ param(
     [int] $TimeoutSec = 300,
     [switch] $SkipSignatureCheck,
     [switch] $AllowVersionMismatch,
+    [string] $NiagaraVersion,
+    [string] $NiagaraHome,
     [string] $ConfigPath,
     [switch] $Confirmed,
     [switch] $DryRun,
@@ -17,7 +19,7 @@ param(
 # What this does NOT do (see docs/limitations.md): install a Niagara dist (use install-dist),
 # set TCP/IP, place or bind licences, import the signer's certificate into the JACE's trust store,
 # or create station users. It only moves module jars onto the JACE and restarts the station.
-$opArgs = @{ jars = ($Jar -join ','); station = $Station; allowVersionMismatch = [bool]$AllowVersionMismatch }
+$opArgs = @{ jars = ($Jar -join ','); station = $Station; allowVersionMismatch = [bool]$AllowVersionMismatch; niagaraVersion = $NiagaraVersion; niagaraHome = $NiagaraHome }
 $ctx = Initialize-AgentScript -Op commission-jace -HostAlias $HostAlias -Tier install -ConfigPath $ConfigPath -Destructive -Confirmed:$Confirmed -DryRun:$DryRun -Json:$Json -OpArgs $opArgs
 try {
     if ($ctx.host.hostord -match '^(ip|host):(localhost|127\.0\.0\.1|::1)$' -or $ctx.host.hostord -like 'local:*') {
@@ -35,6 +37,21 @@ try {
             Fail-AgentScript -Ctx $ctx -Message "Station '$Station' is not in the allowlisted stations for host '$($ctx.host.alias)'" -ExitCode 4 -Status DENIED -OpArgs $opArgs
         }
     }
+
+    # 0. Which Niagara on this machine runs plat. Each version has its own plat and its own modules folder
+    #    (the software database moduleinstall copies from), so this matters as much as the jars do.
+    #    -NiagaraHome or -NiagaraVersion pick one; otherwise the configured niagaraHome reads the JACE and,
+    #    once its runtime is known, the install with the JACE's major.minor does the install.
+    if ($NiagaraVersion -and $NiagaraVersion -notmatch '^\d+(\.\d+){0,3}$') { Fail-AgentScript -Ctx $ctx -Message "Invalid Niagara version '$NiagaraVersion' (expected e.g. 4.15 or 4.15.3.28)" -ExitCode 2 -OpArgs $opArgs }
+    if ($NiagaraHome) { try { Test-NiagaraArgument -Kind LocalPath -Value $NiagaraHome | Out-Null } catch { Fail-AgentScript -Ctx $ctx -Message $_.Exception.Message -ExitCode 2 -OpArgs $opArgs } }
+    $homes = @(Find-NiagaraHomes -Config $ctx.config -HostInfo $ctx.host)
+    $niagaraPick = $null; $homeNote = $null
+    try { $niagaraPick = Select-NiagaraHome -Homes $homes -Path $NiagaraHome -Version $NiagaraVersion -Preferred $ctx.host.niagaraHome }
+    catch {
+        if ($NiagaraHome -or $NiagaraVersion -or -not $DryRun) { Fail-AgentScript -Ctx $ctx -Message $_.Exception.Message -ExitCode 6 -OpArgs $opArgs }
+        $homeNote = $_.Exception.Message
+    }
+    if ($niagaraPick) { $ctx.host = Use-NiagaraHome -HostInfo $ctx.host -Path $niagaraPick.path }
 
     # 1. The jars: present, a valid module name, signed (Niagara 4.9+ refuses unsigned modules).
     $preflight = @(); $names = @()
@@ -78,12 +95,26 @@ try {
     }
 
     # 3. plat moduleinstall installs from THIS machine's software database, so its Niagara should be the
-    #    JACE's major.minor; otherwise plat may try to bring core modules across versions.
+    #    JACE's major.minor; otherwise plat may try to bring core modules across versions. When nothing was
+    #    named, switch to the install that matches the JACE, if this machine has one.
+    $remoteVersion = $(if ($jace -and $jace.Contains('Niagara Runtime')) { ConvertFrom-NiagaraVersion -Text ([string]$jace['Niagara Runtime']) } else { $null })
+    $installedList = (@($homes | ForEach-Object { if ($_.version) { $_.version } else { "unknown at $($_.path)" } }) -join ', ')
+    if ($remoteVersion -and -not $NiagaraHome -and -not $NiagaraVersion) {
+        try {
+            $matched = Select-NiagaraHome -Homes $homes -MatchVersion $remoteVersion
+            if (-not $niagaraPick -or $matched.path -ne $niagaraPick.path) {
+                $homeNote = "Using the Niagara at $($matched.path) ($($matched.version)): $($matched.reason)."
+                $niagaraPick = $matched
+                $ctx.host = Use-NiagaraHome -HostInfo $ctx.host -Path $matched.path
+            }
+        } catch { $homeNote = $_.Exception.Message }
+    }
     $localVersion = $null
     try { $localVersion = ConvertFrom-NiagaraVersion -Text ((Invoke-Nre -HostInfo $ctx.host -Arguments @('-version')).lines -join ' ') } catch { }
-    $versions = Compare-NiagaraVersion -Local $localVersion -Remote $(if ($jace) { ConvertFrom-NiagaraVersion -Text $jace['Niagara Runtime'] } else { $null })
+    if (-not $localVersion -and $niagaraPick) { $localVersion = $niagaraPick.version }
+    $versions = Compare-NiagaraVersion -Local $localVersion -Remote $remoteVersion
     $blocked = @()
-    if ($versions.verdict -eq 'mismatch' -and -not $AllowVersionMismatch) { $blocked += "Niagara $($versions.local) here and $($versions.remote) on the JACE differ in major.minor; install from a matching Niagara or pass -AllowVersionMismatch" }
+    if ($versions.verdict -eq 'mismatch' -and -not $AllowVersionMismatch) { $blocked += "Niagara $($versions.local) here and $($versions.remote) on the JACE differ in major.minor; install from a matching Niagara (installed here: $installedList) or pass -AllowVersionMismatch" }
     if ($versions.verdict -eq 'unknown' -and -not $DryRun) { $blocked += "Couldn't compare Niagara versions (here: $($versions.local), JACE: $($versions.remote))" }
 
     $health = $null
@@ -110,6 +141,8 @@ try {
         jaceNote = $(if ($credNote) { $credNote } elseif ($readError) { "JACE not read: $readError" } else { $null })
         stations = @($stations | ForEach-Object { [pscustomobject]@{ name = $_.name; status = $_.status } })
         niagara = $versions
+        niagaraHome = $(if ($niagaraPick) { [pscustomobject]@{ path = $niagaraPick.path; version = $niagaraPick.version; because = $niagaraPick.reason; installs = $homes.Count } } else { $null })
+        niagaraHomeNote = $homeNote
         jars = $preflight
         steps = $steps
         healthBefore = $(if ($health) { [pscustomobject]@{ ok = $health.ok; status = $health.status } } else { $null })

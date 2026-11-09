@@ -10,6 +10,20 @@
       "type": "string",
       "description": "Niagara install (contains bin/, modules/, jre/) on the machine that runs plat/nre."
     },
+    "niagaraHomes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Other Niagara installs on this machine (one per version), for scripts that pick an install by version or by the target host's runtime."
+    },
+    "niagaraSearchRoots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Folders whose subfolders are Niagara installs (for example C:\\\\Honeywell). C:\\\\Niagara, Program Files\\\\Niagara and /opt/Niagara are always searched."
+    },
     "daemonUserHome": {
       "type": "string",
       "description": "Daemon user home (stations live under <daemonUserHome>/stations)."
