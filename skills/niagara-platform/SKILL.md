@@ -17,7 +17,7 @@ or `nre.exe` yourself.
 3. Pick the skill by task:
    - stations: `list-stations`, `start-station`, `stop-station`, `restart-station`, `watch-station`, `tell-station`
    - host: `inspect-host`, `verify-health`, `manage-daemon`, `reboot-host`
-   - software: `install-modules`
+   - software: `install-modules` (this host), `commission-jace` (a remote JACE)
    - logs/audit: `get-station-logs`, `read-audit-log`
    - remote host: `run-remote`
 
