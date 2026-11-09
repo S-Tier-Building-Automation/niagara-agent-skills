@@ -3,7 +3,7 @@ BeforeAll {
     $script:tmpHome = Join-Path ([System.IO.Path]::GetTempPath()) ("nas-scripts-" + [guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Force -Path $script:tmpHome | Out-Null
     $script:cfgPath = Join-Path $script:tmpHome 'config.json'
-    @{ niagaraHome = $script:tmpHome; hosts = @{ local = @{ hostord = 'ip:localhost'; allow = @('read', 'station', 'install', 'host'); stations = @('demo') }; ro = @{ hostord = 'ip:localhost'; allow = @('read') } } } |
+    @{ niagaraHome = $script:tmpHome; hosts = @{ local = @{ hostord = 'ip:localhost'; allow = @('read', 'station', 'install', 'host'); stations = @('demo') }; ro = @{ hostord = 'ip:localhost'; allow = @('read') }; jace = @{ hostord = 'ip:192.0.2.10'; port = 5011; secure = $true; allow = @('read', 'station', 'install'); stations = @('bench') } } } |
         ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $script:cfgPath
     function Invoke-Script([string] $name, [string[]] $argv) {
         $out = & pwsh -NoProfile -NonInteractive -File (Join-Path $script:root 'scripts' $name) @argv 2>&1
@@ -52,5 +52,43 @@ Describe 'confirmation and allowlist gates' {
         $r = Invoke-Script 'read-audit-log.ps1' @('-Days', '1', '-Status', 'NEEDS_CONFIRM', '-Json')
         $r.exit | Should -Be 0
         $r.result.count | Should -BeGreaterOrEqual 1
+    }
+}
+
+Describe 'commission-jace' {
+    BeforeAll {
+        $script:jar = Join-Path $script:tmpHome 'STierAPI-rt.jar'
+        Set-Content -LiteralPath $script:jar -Value 'not a real jar'
+    }
+    It 'exits 3 without -Confirmed' {
+        $r = Invoke-Script 'commission-jace.ps1' @('-HostAlias', 'jace', '-Jar', $script:jar, '-ConfigPath', $script:cfgPath, '-Json')
+        $r.exit | Should -Be 3
+        $r.result.needsConfirm | Should -BeTrue
+    }
+    It 'refuses a host that is this machine' {
+        $r = Invoke-Script 'commission-jace.ps1' @('-HostAlias', 'local', '-Jar', $script:jar, '-ConfigPath', $script:cfgPath, '-DryRun', '-SkipSignatureCheck', '-Json')
+        $r.exit | Should -Be 2
+    }
+    It 'refuses a station outside the allowlist' {
+        $r = Invoke-Script 'commission-jace.ps1' @('-HostAlias', 'jace', '-Jar', $script:jar, '-Station', 'other', '-ConfigPath', $script:cfgPath, '-DryRun', '-SkipSignatureCheck', '-Json')
+        $r.exit | Should -Be 4
+    }
+    It 'exits 6 for a missing jar' {
+        $r = Invoke-Script 'commission-jace.ps1' @('-HostAlias', 'jace', '-Jar', (Join-Path $script:tmpHome 'Missing-rt.jar'), '-ConfigPath', $script:cfgPath, '-DryRun', '-Json')
+        $r.exit | Should -Be 6
+    }
+    It 'dry run lists every step with the password masked and changes nothing' {
+        $r = Invoke-Script 'commission-jace.ps1' @('-HostAlias', 'jace', '-Jar', $script:jar, '-Station', 'bench', '-ConfigPath', $script:cfgPath, '-DryRun', '-SkipSignatureCheck', '-Json')
+        $r.exit | Should -Be 0
+        $r.result.dryRun | Should -BeTrue
+        $steps = $r.result.plan.steps -join "`n"
+        $steps | Should -Match 'moduleinstall .*-h:ip:192\.0\.2\.10.*STierAPI-rt'
+        $steps | Should -Match '-pwd:\*{8}'
+        $steps | Should -Match 'stopstation bench'
+        $steps | Should -Match 'startstation bench'
+        $r.result.plan.jars[0].module | Should -Be 'STierAPI-rt'
+        $r.result.plan.jars[0].sha256 | Should -Match '^[0-9a-f]{64}$'
+        ($r.raw -join "`n") | Should -Not -Match '-pwd:pw\b'
+        Test-Path -LiteralPath (Join-Path $script:tmpHome 'modules' 'STierAPI-rt.jar') | Should -BeFalse
     }
 }

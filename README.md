@@ -12,6 +12,7 @@ What you get:
 | `list-stations`, `inspect-host`, `verify-health`, `watch-station`, `get-station-logs`, `backup-station`, `read-audit-log` | read | never changes state |
 | `start-station`, `stop-station`, `restart-station`, `tell-station` | station | daemon-level station control with status polling |
 | `install-modules`, `install-dist`, `import-trust-cert` | install | signed-jar preflight, `plat moduleinstall`/`distinstall`, headless trust-store import |
+| `commission-jace` | install (+ station) | modules onto a remote JACE from this machine's Niagara: dry run first, version and signature preflight, optional station restart and health check |
 | `manage-daemon`, `reboot-host`, `run-plat-script` | host | service control, host reboot (double confirmation), reviewed plat scripts |
 | `run-remote` | - | runs any of the above on a remote host over SSH |
 

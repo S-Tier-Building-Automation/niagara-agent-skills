@@ -144,3 +144,32 @@ function ConvertFrom-PlatUsage {
     }
     return @($flags | Select-Object -Unique)
 }
+
+function ConvertFrom-NiagaraVersion {
+    <#
+    .SYNOPSIS
+        Pulls the first dotted Niagara version (4.15.3.28) out of text such as `nre -version` or the
+        `Niagara Runtime` line of `plat details`. Returns $null when there is none.
+    #>
+    param([AllowEmptyString()] [AllowNull()] [string] $Text)
+    if ($Text -and $Text -match '(\d+\.\d+\.\d+(?:\.\d+)?)') { return $Matches[1] }
+    return $null
+}
+
+function Compare-NiagaraVersion {
+    <#
+    .SYNOPSIS
+        Compares the Niagara version that will run plat with the target host's runtime.
+        plat moduleinstall installs from the local software database, so both should be the same
+        major.minor (4.15 to 4.15); a different patch is reported but allowed.
+    #>
+    param([AllowEmptyString()] [AllowNull()] [string] $Local, [AllowEmptyString()] [AllowNull()] [string] $Remote)
+    if (-not $Local -or -not $Remote) {
+        return [pscustomobject]@{ local = $Local; remote = $Remote; sameMinor = $false; samePatch = $false; verdict = 'unknown' }
+    }
+    $l = $Local.Split('.'); $r = $Remote.Split('.')
+    $sameMinor = ($l.Count -ge 2 -and $r.Count -ge 2 -and $l[0] -eq $r[0] -and $l[1] -eq $r[1])
+    $samePatch = $sameMinor -and ($l.Count -ge 3 -and $r.Count -ge 3 -and $l[2] -eq $r[2])
+    $verdict = if (-not $sameMinor) { 'mismatch' } elseif ($samePatch) { 'match' } else { 'patch-differs' }
+    return [pscustomobject]@{ local = $Local; remote = $Remote; sameMinor = [bool]$sameMinor; samePatch = [bool]$samePatch; verdict = $verdict }
+}

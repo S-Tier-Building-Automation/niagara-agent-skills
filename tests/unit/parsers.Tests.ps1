@@ -76,3 +76,28 @@ Describe 'ConvertFrom-PlatUsage' {
         (ConvertFrom-PlatUsage -Lines (Get-Fixture 'plat/4.15.3/liststations-usage.txt')) | Should -Not -Contain '-ood'
     }
 }
+
+Describe 'ConvertFrom-NiagaraVersion' {
+    It 'reads nre -version output' {
+        ConvertFrom-NiagaraVersion -Text ((Get-Fixture 'nre/4.15.3/version.txt') -join ' ') | Should -Be '4.15.3.28'
+    }
+    It 'reads the Niagara Runtime line of plat details' {
+        $d = ConvertFrom-PlatKeyValue -Lines (Get-Fixture 'plat/4.15.3/details.txt')
+        ConvertFrom-NiagaraVersion -Text $d['Niagara Runtime'] | Should -Be '4.15.3.28'
+    }
+    It 'returns null when there is no version' {
+        ConvertFrom-NiagaraVersion -Text 'no version here' | Should -BeNullOrEmpty
+        ConvertFrom-NiagaraVersion -Text $null | Should -BeNullOrEmpty
+    }
+}
+
+Describe 'Compare-NiagaraVersion' {
+    It 'matches the same release' { (Compare-NiagaraVersion -Local '4.15.3.28' -Remote '4.15.3.28').verdict | Should -Be 'match' }
+    It 'allows a different patch of the same major.minor' {
+        $c = Compare-NiagaraVersion -Local '4.15.3.28' -Remote '4.15.2.38'
+        $c.verdict | Should -Be 'patch-differs'
+        $c.sameMinor | Should -BeTrue
+    }
+    It 'flags a different major.minor' { (Compare-NiagaraVersion -Local '4.15.3.28' -Remote '4.14.3.24').verdict | Should -Be 'mismatch' }
+    It 'is unknown when a side is missing' { (Compare-NiagaraVersion -Local '4.15.3.28' -Remote $null).verdict | Should -Be 'unknown' }
+}
